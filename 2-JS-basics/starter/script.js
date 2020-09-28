@@ -1,45 +1,22 @@
-class Score {
-	constructor(...scores) {
-		this.scores = scores
-	}
+function calculateTips(...bills) {
+	const tips = []
+	const total = bills.map(price => {
+		let p = 0.2
 
-	changeScore(MatchIndex, score) {
-		if (
-			typeof MatchIndex !== 'number' ||
-			MatchIndex >= this.scores.length ||
-			typeof score !== 'number'
-		)
-			return
+		if (price > 50 && price < 200) p = 0.15
+		else if (price > 200) p = 0.1
 
-		this.scores[MatchIndex] = score
-	}
+		const tip = price * p
 
-	get score() {
-		const total = this.scores.reduce((n, total) => total + n)
-		return total
-	}
+		tips.push(tip)
+		return tip + price
+	})
 
-	get average() {
-		const average = this.score / this.scores.length
-		return average
+	return {
+		bills,
+		tips,
+		total,
 	}
 }
 
-const john = new Score(89, 120, 103)
-const mike = new Score(116, 94, 123)
-const mary = new Score(97, 134, 105)
-
-john.changeScore(1, 130)
-
-console.log(`Mike's average score: ` + mike.average)
-console.log(`John's average score: ` + john.average)
-console.log(`Mary's average score: ` + mary.average)
-
-let string = `And the winner is: `
-
-if (john.average > mary.average && john.average > mike.average) string += 'John'
-else if (mary.average > john.average && mary.average > mike.average)
-	string += 'Mary'
-else string += 'Mike'
-
-console.log(string)
+console.log(calculateTips(124, 48, 268))
