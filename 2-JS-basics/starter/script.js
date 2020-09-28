@@ -1,22 +1,36 @@
-function calculateTips(...bills) {
-	const tips = []
-	const total = bills.map(price => {
-		let p = 0.2
-
-		if (price > 50 && price < 200) p = 0.15
-		else if (price > 200) p = 0.1
-
-		const tip = price * p
-
-		tips.push(tip)
-		return tip + price
-	})
-
-	return {
-		bills,
-		tips,
-		total,
+class ValueRange {
+	constructor(min, max, p) {
+		this.min = min
+		this.max = max
+		this.p = p
 	}
 }
 
-console.log(calculateTips(124, 48, 268))
+const tipCalculator = {
+	bills: [124, 48, 268, 180, 42],
+	pRanges: [
+		new ValueRange(null, 50, 0.2),
+		new ValueRange(50, 200, 0.15),
+		new ValueRange(200, null, 0.1),
+	],
+	calculateTip() {
+		const { bills } = this,
+			tips = [],
+			percent = [],
+			total = bills.map(price => {
+				for (let i = 0; i < this.pRanges.length; i++) {
+					const { min, max, p } = this.pRanges[i]
+					if (min !== null && price < min) continue
+					if (max !== null && price > max) continue
+					const tip = price * p
+					tips.push(tip)
+					percent.push(p)
+					return tip + price
+				}
+			})
+
+		return { bills, percent, tips, total }
+	},
+}
+
+console.table(tipCalculator.calculateTip())
