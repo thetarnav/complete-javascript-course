@@ -1,25 +1,8 @@
 ///////////////////////////////////////
 // Lecture: Hoisting
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 ///////////////////////////////////////
 // Lecture: Scoping
-
 
 // First scoping example
 
@@ -37,8 +20,6 @@ function first() {
     }
 }
 */
-
-
 
 // Example to show the differece between execution stack and scope chain
 
@@ -62,16 +43,45 @@ function third() {
 }
 */
 
-
-
 ///////////////////////////////////////
 // Lecture: The this keyword
 
+const myArrowFunc = () => console.log(this)
+myArrowFunc()
 
+const myObject = {
+	property: 123,
+	copy: this,
 
+	myMethod() {
+		console.log(this)
+	},
+	myMethod2: function () {
+		console.log(this)
 
+		function innerFunc() {
+			console.log(this)
+		}
+		innerFunc()
 
+		const arrowFunc = () => console.log(this)
+		arrowFunc()
+	},
+}
 
+myObject.myMethod()
+myObject.myMethod2()
 
+const newObject = {
+	property: 321,
+}
 
+newObject.myMethod = myObject.myMethod
+newObject.myMethod2 = myObject.myMethod2
 
+newObject.myMethod()
+newObject.myMethod2()
+
+newObject.copy = myObject.copy
+console.log(newObject.copy)
+console.log(myObject.copy)
