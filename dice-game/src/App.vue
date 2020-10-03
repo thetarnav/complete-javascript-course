@@ -10,7 +10,7 @@
 				<feColorMatrix
 					in="blur"
 					mode="matrix"
-					values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 15 -4"
+					values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 13 -4"
 					result="goo"
 				/>
 				<feComposite in="SourceGraphic" in2="goo" operator="atop" />

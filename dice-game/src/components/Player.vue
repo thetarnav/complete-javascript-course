@@ -43,7 +43,7 @@ export default {
 	display: flex;
 	flex-direction: column;
 	align-items: flex-start;
-	filter: blur(0.5px);
+	filter: blur(0.4px);
 }
 .name {
 	display: block;
