@@ -1,0 +1,28 @@
+@use "sass:math";
+
+$base: 20px;
+$ratio: 1.618;
+$grid-size: 30px;
+
+$headline-type-av: 0.5;
+$text-type-av: 0.5;
+$caption-type-av: 0.5;
+
+@function ms(
+	$value,
+	$ms-ratio: $ratio,
+	$ms-base: $base,
+	$ms-goal-av: $text-type-av,
+	$ms-av: $ms-goal-av
+) {
+	$av-correction: $ms-goal-av / $ms-av;
+	// $size: calc(#{math.pow($ms-ratio, $value) * $av-correction} * #{$ms-base}); // with calc
+	$size: math.pow($ms-ratio, $value) * $av-correction * $ms-base;
+
+	@return $size;
+}
+
+@function gs($value, $gs-size: $grid-size) {
+	// @return calc(#{$value} * #{$gs-size});
+	@return $value * $gs-size;
+}

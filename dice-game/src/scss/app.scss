@@ -1,0 +1,30 @@
+@use 'base';
+
+@use 'library/colors' as color;
+@use 'library/ms' as *;
+
+.clearfix::after {
+	content: '';
+	display: table;
+	clear: both;
+}
+
+body {
+	font-family: 'Nunito', sans-serif;
+	font-weight: 700;
+	position: relative;
+	height: 100vh;
+	background: color.$bg;
+	color: color.$dark;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+#app {
+	max-width: ms(7);
+	width: 100%;
+	display: flex;
+	flex-direction: column;
+	padding: gs(1);
+}

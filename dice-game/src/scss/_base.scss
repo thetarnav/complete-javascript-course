@@ -1,0 +1,35 @@
+html,
+body {
+	min-width: 100%;
+	min-width: 100%;
+}
+body {
+	margin: 0;
+	@supports not (font-variant-ligatures: common-ligatures) {
+		font-feature-settings: 'liga' 1, 'onum' 1;
+	}
+	@supports (font-variant-ligatures: common-ligatures) {
+		font-variant-ligatures: common-ligatures;
+		font-variant-numeric: oldstyle-nums;
+	}
+}
+
+* {
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+	hanging-punctuation: first;
+	@supports (hyphens: auto) {
+		hyphens: auto;
+		hypenate-limit-chars: 6 3 2;
+		hypenate-limit-lines: 2;
+		hypenate-limit-zone: 8%;
+		hypenate-limit-last: always;
+	}
+}
+*,
+*::before,
+*::after {
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
+}
