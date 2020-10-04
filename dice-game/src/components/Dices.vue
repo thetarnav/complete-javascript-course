@@ -1,57 +1,38 @@
 <template>
 	<transition-group appear name="dices" tag="div" class="dices">
 		<div
-			v-for="(dice, diceIndex) in dices"
-			:key="diceIndex"
+			v-for="dice in dices"
+			:key="dice.id"
 			class="dice"
-			:data-nr="dice"
-			@click="roll(diceIndex)"
+			:data-nr="dice.nr"
+			@click="click(dice.id)"
+			:class="{ selected: dice.isSelected, disabled: dice.isDisabled || dice.isGone }"
 		>
 			<ul class="dots">
 				<li v-for="(dot, index) in 9" :key="index" class="dot active"></li>
 			</ul>
 			<ul class="dots">
-				<li
-					v-for="(dot, index) in 9"
-					:key="index"
-					class="dot inactive"
-				></li>
+				<li v-for="(dot, index) in 9" :key="index" class="dot inactive"></li>
 			</ul>
 		</div>
 	</transition-group>
 </template>
 
 <script>
-import { random } from '@/js/utilities'
+import { mapState } from 'vuex'
 
 export default {
+	name: 'Dices',
 	data() {
-		return {
-			dices: [],
-		}
+		return {}
+	},
+	computed: {
+		...mapState(['dices']),
 	},
 	methods: {
-		roll(n) {
-			if (typeof n !== 'number') {
-				const max = this.dices.length || 5
-
-				this.dices = []
-				for (let i = 0; i < max; i++) {
-					this.dices.push(random(1, 6, 'round'))
-				}
-			} else {
-				this.dices[n] = random(1, 6, 'round')
-			}
+		click(id) {
+			this.$emit('dice-click', id)
 		},
-		add() {
-			this.roll(this.dices.length)
-		},
-		pop() {
-			this.dices.pop()
-		},
-	},
-	mounted() {
-		this.roll()
 	},
 }
 </script>
@@ -141,7 +122,7 @@ $padding: 0;
 		background: color.$main;
 		border-radius: 50%;
 
-		transition: transform 0.4s;
+		transition: transform 0.4s, background 0.2s;
 		&.active {
 			background: color.$dark;
 			@include hidden-dot;
@@ -238,61 +219,19 @@ $padding: 0;
 	position: absolute;
 }
 
-.buttons {
-	position: fixed;
-	bottom: 0;
-	left: 0;
-	right: 0;
-	display: flex;
-	justify-content: center;
+.selected {
+	background-color: red;
+	.inactive {
+		// background: color.$pale;
+	}
 }
-.btn {
-	position: relative;
-	width: $size;
-	height: $size;
-	margin: $margin/2;
-	background: transparent;
-	border: none;
-	cursor: pointer;
-	svg {
-		width: $size/1.618;
-		path {
-			fill: color.$main;
-			transition: fill 0.2s;
-		}
+.disabled {
+	// opacity: 0.5;
+	.dot.inactive {
+		background: color.$pale;
 	}
-	&:hover {
-		svg path {
-			fill: color.$dark;
-		}
-	}
-
-	&:before {
-		content: '';
-		position: absolute;
-		z-index: -1;
-		top: 0;
-		left: 0;
-		width: 100%;
-		height: 100%;
-		border-radius: 50%;
-		background-color: color.$main;
-		clip-path: circle(0 at 50% 50%);
-
-		opacity: 0;
-	}
-	@keyframes circle-animation {
-		50% {
-			opacity: 1;
-			clip-path: circle(100% at 50% 50%);
-		}
-		to {
-			opacity: 0;
-			clip-path: circle(0 at 50% 50%);
-		}
-	}
-	&:active:before {
-		animation: circle-animation 0.4s;
+	.dot.active {
+		background: color.$main;
 	}
 }
 </style>

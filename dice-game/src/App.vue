@@ -2,15 +2,11 @@
 	<svg xmlns="http://www.w3.org/2000/svg" version="1.1" style="display: none;">
 		<defs>
 			<filter id="text-goo">
-				<feGaussianBlur
-					in="SourceGraphic"
-					stdDeviation="1.8"
-					result="blur"
-				/>
+				<feGaussianBlur in="SourceGraphic" stdDeviation="1.7" result="blur" />
 				<feColorMatrix
 					in="blur"
 					mode="matrix"
-					values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 13 -4"
+					values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 17 -6"
 					result="goo"
 				/>
 				<feComposite in="SourceGraphic" in2="goo" operator="atop" />
@@ -20,11 +16,7 @@
 	<svg xmlns="http://www.w3.org/2000/svg" version="1.1" style="display: none;">
 		<defs>
 			<filter id="small-text-goo">
-				<feGaussianBlur
-					in="SourceGraphic"
-					stdDeviation="1.4"
-					result="blur"
-				/>
+				<feGaussianBlur in="SourceGraphic" stdDeviation="1.3" result="blur" />
 				<feColorMatrix
 					in="blur"
 					mode="matrix"
@@ -59,7 +51,7 @@
 	/>
 
 	<main class="board">
-		<button class="btn roll" @click="roll">
+		<button class="btn roll" @click="roll" :disabled="boardDisabled">
 			<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
 				<title>ic24-rotate</title>
 				<g fill="#000000">
@@ -70,8 +62,8 @@
 				</g>
 			</svg>
 		</button>
-		<Dices class="dices" :dicesLeft="5" />
-		<button class="btn keep" @click="keep">
+		<Dices class="dices" @dice-click="diceClick" />
+		<button class="btn keep" @click="keep" :disabled="boardDisabled">
 			<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
 				<g class="nc-icon-wrapper" fill="#000000">
 					<path
@@ -94,6 +86,8 @@
 </template>
 
 <script>
+import { mapState } from 'vuex'
+
 import Dices from '@/components/Dices'
 import Player from '@/components/Player'
 
@@ -107,13 +101,25 @@ export default {
 		return {
 			totalScore: [1250, 660],
 			roundScore: [0, 450],
-			active: 0,
+			active: 1,
 		}
 	},
 	computed: {
 		winning() {
 			return this.totalScore[0] > this.totalScore[1] ? 0 : 1
 		},
+		...mapState(['boardDisabled']),
+	},
+	methods: {
+		roll() {
+			this.$store.dispatch('roll')
+		},
+		diceClick(diceId) {
+			this.$store.dispatch('select', diceId)
+		},
+	},
+	mounted() {
+		this.$store.dispatch('roll')
 	},
 }
 </script>
@@ -143,6 +149,7 @@ export default {
 	background: transparent;
 	border-radius: 50%;
 	border: none;
+	outline: none;
 	cursor: pointer;
 	svg {
 		width: $size/1.618;
@@ -165,7 +172,7 @@ export default {
 		transition: clip-path 0.2s;
 	}
 
-	&:hover {
+	&:not(:disabled):hover {
 		svg path {
 			fill: color.$dark;
 		}
@@ -184,8 +191,15 @@ export default {
 			clip-path: circle(0 at 50% 50%);
 		}
 	}
-	&:active:before {
+
+	&:not(:disabled):active:before {
 		animation: circle-animation 0.4s;
+	}
+
+	&:disabled {
+		svg path {
+			fill: color.$pale;
+		}
 	}
 }
 </style>

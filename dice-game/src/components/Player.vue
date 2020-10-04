@@ -7,7 +7,23 @@
 			winning: isWinning,
 		}"
 	>
-		<header class="name">{{ playerName }}</header>
+		<header class="name">
+			{{ playerName }}
+			<span class="crown">
+				<svg
+					version="1.2"
+					baseProfile="tiny"
+					xmlns="http://www.w3.org/2000/svg"
+					xmlns:xlink="http://www.w3.org/1999/xlink"
+					viewBox="0 0 24 24"
+					xml:space="preserve"
+				>
+					<polygon
+						points="24,5.3 22.5,19.1 1.3,19.1 0,5.3 6.7,7.5 11.9,0.9 17.2,7.5 "
+					/>
+				</svg>
+			</span>
+		</header>
 		<div class="scores">
 			<span class="total">
 				{{ totalScore }}
@@ -43,13 +59,13 @@ export default {
 	display: flex;
 	flex-direction: column;
 	align-items: flex-start;
-	filter: blur(0.4px);
+	filter: blur(0.45px);
 }
 .name {
 	display: block;
 	position: relative;
 
-	filter: url(#text-goo);
+	filter: url(#small-text-goo);
 	font-size: ms(1);
 	text-transform: uppercase;
 	letter-spacing: 0.05em;
@@ -61,10 +77,25 @@ export default {
 		width: ms(0);
 		height: ms(0);
 		background: color.$pale;
-		clip-path: circle(0 at 50% 50%);
+		border-radius: 50%;
+		transform: scale(0);
 		top: calc(50% - #{ms(0)} / 2);
 		margin-left: ms(-1);
 		transition: clip-path 0.2s;
+	}
+}
+
+.crown {
+	position: absolute;
+	right: 100%;
+	margin-right: ms(-1);
+	width: ms(1);
+	height: ms(1);
+	top: calc(50% - #{ms(1)} / 2);
+	transform: scale(0);
+	path,
+	polygon {
+		fill: color.$pale;
 	}
 }
 .scores {
@@ -94,8 +125,14 @@ export default {
 .active {
 	.name {
 		&:after {
-			clip-path: circle(50% at 50% 50%);
+			transform: scale(1);
 		}
+	}
+}
+
+.winning {
+	.crown {
+		transform: scale(1);
 	}
 }
 </style>
