@@ -1,11 +1,5 @@
 <template>
-	<transition-group
-		appear
-		name="dices"
-		tag="div"
-		class="dices"
-		:duration="1000"
-	>
+	<transition-group appear name="dices" tag="div" class="dices">
 		<div
 			v-for="(dice, diceIndex) in dices"
 			:key="diceIndex"
